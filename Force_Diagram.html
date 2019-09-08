@@ -1,0 +1,195 @@
+<!-- Styles -->
+<style>
+#chartdiv {
+  width: 100%;
+height:800px;
+}
+</style>
+
+<!-- Resources -->
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/plugins/forceDirected.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+
+<!-- Chart code -->
+<script>
+am4core.ready(function() {
+
+// Themes begin
+am4core.useTheme(am4themes_animated);
+// Themes end
+
+var chart = am4core.create("chartdiv", am4plugins_forceDirected.ForceDirectedTree);
+
+var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
+networkSeries.dataFields.linkWith = "linkWith";
+networkSeries.dataFields.name = "name";
+networkSeries.dataFields.id = "name";
+networkSeries.dataFields.value = "value";
+networkSeries.dataFields.children = "children";
+
+networkSeries.nodes.template.label.text = "{name}"
+networkSeries.fontSize = 13;
+networkSeries.linkWithStrength = 0.5;
+
+var nodeTemplate = networkSeries.nodes.template;
+nodeTemplate.tooltipText = "{name}";
+nodeTemplate.fillOpacity = 1;
+nodeTemplate.label.hideOversized = true;
+nodeTemplate.label.truncate = true;
+
+var linkTemplate = networkSeries.links.template;
+linkTemplate.strokeWidth = 3;
+var linkHoverState = linkTemplate.states.create("hover");
+linkHoverState.properties.strokeOpacity = 1;
+linkHoverState.properties.strokeWidth = 2;
+
+nodeTemplate.events.on("over", function (event) {
+    var dataItem = event.target.dataItem;
+    dataItem.childLinks.each(function (link) {
+        link.isHover = true;
+    })
+})
+
+nodeTemplate.events.on("out", function (event) {
+    var dataItem = event.target.dataItem;
+    dataItem.childLinks.each(function (link) {
+        link.isHover = false;
+    })
+})
+
+networkSeries.data = [  
+   {  
+      "name":"C O L A B O R A",
+      "value":460,
+      "linkWith":[  
+         "Comparte tus datos",
+         "Utilizalo",
+         "Unete a una disusión",
+         "Contribuye con el codigo",
+         "Dona",
+      ],
+      
+   },
+   {  
+      "name":"Comparte tus datos",
+      "value":200,
+      "children":[  
+         
+         {  
+            "name":"GitHub",
+            "value":120,
+            
+            "linkWith":[  
+               "Zenodo",
+         ],
+         },
+         {  
+            "name":"Zenodo",
+            "value":120,
+            
+            "linkWith":[  
+               "GitHub",
+         ],
+         }, 
+
+         {  
+            "name":"iNaturaist.org",
+            "value":120
+         },
+         
+         {  
+            "name":"Abre un conflicto (issue)",
+            "value":120
+         },
+         {  
+            "name":"Publica un Datapaper y avisanos",
+            "value":120
+         },
+         {  
+            "name":"Twittea  @GlobalBiotic",
+            "value":120
+         }
+         
+      ]
+   },
+   {  
+      "name":"Utilizalo",
+      "value":220,
+      
+   },
+   {  
+      "name":"Unete a una disusión",
+      "value":220,
+      
+      "children":[  
+         {  
+            "name":"Pregunta",
+            "value":110
+         },
+         {  
+            "name":"Comparte tus ideas",
+            "value":150
+         },
+         {  
+            "name":"Registrate en lista de correos",
+            "value":170
+         }
+         
+      ]
+   },
+   {  
+      "name":"Contribuye con el codigo",
+      "value":270,
+      
+      "children":[  
+         {  
+            "name":"rglobi",
+            "value":110
+         },
+         {  
+            "name":"elton",
+            "value":110
+         },
+         {  
+            "name":"Esta pagina web",
+            "value":130
+         },
+         {  
+            "name":"Mejorando las librerias",
+            "value":130
+         }
+      ]
+   },
+   {  
+      "name":"Dona",
+      "value":100,
+      "children":[  
+         {  
+            "name":"Tiempo",
+            "value":110
+         },
+         {  
+            "name":"Fondos",
+            "value":110
+         },
+         {  
+            "name":"Espacio en servidores",
+            "value":150
+         },
+         {  
+            "name":"Almacenamiento ",
+            "value":170
+         },
+         
+      ]
+   }
+];
+
+
+}); // end am4core.ready()
+</script>
+
+<!-- HTML -->
+<div id="chartdiv"></div>
